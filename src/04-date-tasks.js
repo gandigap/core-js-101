@@ -75,8 +75,20 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  let hours = endDate.getHours() - startDate.getHours();
+  hours = hours < 10 ? `0${hours}` : hours;
+  let minutes = endDate.getMinutes() - startDate.getMinutes();
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  let seconds = endDate.getSeconds() - startDate.getSeconds();
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+  let milliseconds = endDate.getMilliseconds() - startDate.getMilliseconds();
+  if (milliseconds < 100) {
+    milliseconds = `00${milliseconds}`;
+  } else if (milliseconds < 10) {
+    milliseconds = `0${milliseconds}`;
+  }
+  return (`${hours}:${minutes}:${seconds}.${milliseconds}`);
 }
 
 
@@ -96,8 +108,13 @@ function timeSpanToString(/* startDate, endDate */) {
  *    Date.UTC(2016,3,5,18, 0) => Math.PI
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
-function angleBetweenClockHands(/* date */) {
-  throw new Error('Not implemented');
+function angleBetweenClockHands(date) {
+  const anglePerMin = 0.5;
+  const hour = date.getUTCHours() % 12;
+  const min = date.getUTCMinutes();
+  let result = Math.abs(anglePerMin * ((60 * hour) - (11 * min)));
+  if (result > 180) result -= 180;
+  return (result / 180) * Math.PI;
 }
 
 
